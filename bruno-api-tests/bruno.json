@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "typescript-trivanki",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
