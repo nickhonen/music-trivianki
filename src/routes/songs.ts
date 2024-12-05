@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { db } from '../db';
-import { songs } from '../db/schema';
+import { songsTable } from '../db/schema';
 
 const router = Router();
 
