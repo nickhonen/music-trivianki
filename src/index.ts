@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import "dotenv/config";
 import songsRouter from "./routes/songs";
 
 const app = express();
