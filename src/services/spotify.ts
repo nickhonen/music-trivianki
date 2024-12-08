@@ -1,6 +1,5 @@
 import { Playlist, SpotifyApi } from "@spotify/web-api-ts-sdk";
 import "dotenv/config";
-import { arch } from "os";
 
 const clientId = process.env.SPOTIFY_CLIENT_ID as string;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET as string;
@@ -48,10 +47,3 @@ export const getPlaylistSongAndArtist = async (
 //     popularity: item.popularity,
 //   }))
 // );
-
-console.table(
-  playlist.tracks.items.map((item) => ({
-    name: item.track.name,
-    artist: item.track.artists.map((artist) => artist.name).join(", "),
-  }))
-);

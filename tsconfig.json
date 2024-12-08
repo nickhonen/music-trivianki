@@ -9,8 +9,7 @@
     "outDir": "./build/",
     "rootDir": "src",
     "skipLibCheck": true,
-    "noImplicitReturns": true,
-    "allowImportingTsExtensions": true
+    "noImplicitReturns": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
