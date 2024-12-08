@@ -3,9 +3,9 @@ import * as spotifyService from "../services/spotify.js";
 
 const router = Router();
 
-export const TRIVIA_PLAYLIST_ID = "1g2MxzFSWnS2Xz9b8fKAaW?si=d0cdeeb0eeca4336";
+export const TRIVIA_PLAYLIST_ID = "1g2MxzFSWnS2Xz9b8fKAaW";
 
-router.get("/playlist-tracks/:playlistId", async (req, res) => {
+router.get("/playlists/:playlistId/tracks", async (req, res) => {
   const playlistTracks = await spotifyService.getAllPlaylistTracks(
     req.params.playlistId
   );
