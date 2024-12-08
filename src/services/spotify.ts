@@ -26,7 +26,7 @@ export const getPlaylistSongAndArtist = async (
     const response = await spotifyApi.playlists.getPlaylist(
       playlistId,
       undefined,
-      "tracks",
+      "tracks(",
       undefined
     );
     const result = response.tracks.items.map((track) => ({
@@ -37,6 +37,37 @@ export const getPlaylistSongAndArtist = async (
     return result;
   } catch (error) {
     throw new Error(`Error fetching playlist in service layer: ${error}`);
+  }
+};
+
+// Doing this to get all tracks in a playlist and get around spotify limit. Might
+// separate out the offset logic.
+export const getAllPlaylistTracks = async (
+  playlistId: string
+  // also need to add type here with my limited fields, or just dont limit fields
+) => {
+  let offset = 0;
+  let allTracks = [];
+  console.log("proof this is getting called");
+
+  try {
+    while (true) {
+      // possible bug, if someone puts in a playlist with EpisodeObjects instead of TrackObjects
+      const response = await spotifyApi.playlists.getPlaylistItems(
+        playlistId,
+        undefined,
+        "items(track(name,artists(name))),total",
+        50,
+        offset
+      );
+      allTracks.push(...response.items);
+
+      if (response.items.length < 50) break;
+      offset += 50;
+    }
+    return allTracks;
+  } catch (error) {
+    throw new Error(`Error in getAllPlaylistTracks: ${error}`);
   }
 };
 
