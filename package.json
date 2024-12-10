@@ -11,6 +11,10 @@
     "check": "tsc --noEmit",
     "studio": "drizzle-kit studio"
   },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
