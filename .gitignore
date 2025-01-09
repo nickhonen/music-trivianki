@@ -33,3 +33,4 @@ dist-ssr
 *.db
 
 bruno-api-tests/
+bruno-api-tests
