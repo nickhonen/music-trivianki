@@ -31,3 +31,5 @@ dist-ssr
 *.sqlite
 *.sqlite3
 *.db
+
+bruno-api-tests/
