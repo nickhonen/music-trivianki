@@ -15,6 +15,10 @@ app.get('/ping', (_req, res) => {
   })
 })
 
+app.get('/', (_req, res) => {
+  res.send('hello world')
+})
+
 app.use('/api/spotify', spotifyRouter)
 
 export { app }

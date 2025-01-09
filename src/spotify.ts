@@ -1,0 +1,114 @@
+import { Playlist, SpotifyApi } from '@spotify/web-api-ts-sdk'
+import 'dotenv/config'
+
+const clientId = process.env.SPOTIFY_CLIENT_ID as string
+const clientSecret = process.env.SPOTIFY_CLIENT_SECRET as string
+const redirectUri = process.env.REDIRECT_URI as string
+const playlistId: string = '1g2MxzFSWnS2Xz9b8fKAaW'
+const scopes = [
+  'user-read-playback-state',
+  'user-modify-playback-state',
+  'streaming',
+  'app-remote-control',
+]
+
+const spotifyApi: SpotifyApi = SpotifyApi.withClientCredentials(
+  clientId,
+  clientSecret
+)
+
+const spotifyApiUserAuth = SpotifyApi.withUserAuthorization(
+  clientId,
+  redirectUri,
+  scopes,
+  undefined
+)
+
+// export function initializeSpotifyApi() {
+//   if (spotifyApi === null) {
+//     spotifyApi = SpotifyApi.withClientCredentials(clientId, clientSecret);
+//   }
+// }
+
+const items = await spotifyApi.search('The Beatles', ['artist'])
+
+// This is where you would write the type in another file.
+export const getPlaylistSongAndArtist = async (
+  playlistId: string
+): Promise<Object[]> => {
+  try {
+    const response = await spotifyApi.playlists.getPlaylist(
+      playlistId,
+      undefined,
+      'tracks(',
+      undefined
+    )
+    const result = response.tracks.items.map((track) => ({
+      name: track.track.name,
+      artist: track.track.artists.map((artist) => artist.name).join(', '),
+    }))
+    console.table(result)
+    return result
+  } catch (error) {
+    throw new Error(`Error fetching playlist in service layer: ${error}`)
+  }
+}
+
+export const getPlaylistUris = async (
+  playlistId: string
+): Promise<string[]> => {
+  try {
+    const response = await spotifyApi.playlists.getPlaylist(
+      playlistId,
+      undefined,
+      'tracks(',
+      undefined
+    )
+    const result = response.tracks.items.map((track) => track.track.uri)
+    const uris = { uris: result }
+    return result
+  } catch (error) {
+    throw new Error(`Error fetching playlist uris in service layer: ${error}`)
+  }
+}
+
+// Doing this to get all tracks in a playlist and get around spotify limit. Might
+// separate out the offset logic.
+export const getAllPlaylistTracks = async (
+  playlistId: string
+  // also need to add type here with my limited fields, or just dont limit fields
+) => {
+  let offset = 0
+  let allTracks = []
+
+  try {
+    while (true) {
+      // possible bug, if someone puts in a playlist with EpisodeObjects instead of TrackObjects
+      const response = await spotifyApi.playlists.getPlaylistItems(
+        playlistId,
+        undefined,
+        'items(track(name,artists(name))),total',
+        50,
+        offset
+      )
+      allTracks.push(...response.items)
+
+      if (response.items.length < 50) break
+      offset += 50
+    }
+    return allTracks
+  } catch (error) {
+    throw new Error(`Error in getAllPlaylistTracks: ${error}`)
+  }
+}
+
+export const startPlayback = async (uris: string[]) => {
+  try {
+    await spotifyApiUserAuth.player.startResumePlayback({
+      device_id: '0622fb5c01b5410423df29adc33e635ebe7d8a2f',
+      uris: uris,
+    } as any)
+  } catch (e) {
+    throw new Error(`player aint working: ${e}`)
+  }
+}
