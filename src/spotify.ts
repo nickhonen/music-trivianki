@@ -1,10 +1,17 @@
-import { Playlist, SpotifyApi } from '@spotify/web-api-ts-sdk'
+import { AccessToken, Playlist, SpotifyApi } from '@spotify/web-api-ts-sdk'
 import 'dotenv/config'
 
 const clientId = process.env.SPOTIFY_CLIENT_ID as string
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET as string
 const redirectUri = process.env.REDIRECT_URI as string
-const playlistId: string = '1g2MxzFSWnS2Xz9b8fKAaW'
+
+// this should be gotten from the frontend
+const accessToken: AccessToken = {
+  access_token: process.env.OAUTH_ACCESS_TOKEN as string,
+  token_type: 'Bearer',
+  expires_in: 3600,
+  refresh_token: process.env.OAUTH_REFRESH_TOKEN as string,
+}
 const scopes = [
   'user-read-playback-state',
   'user-modify-playback-state',
@@ -17,7 +24,12 @@ const spotifyApi: SpotifyApi = SpotifyApi.withClientCredentials(
   clientSecret
 )
 
-const spotifyApiUserAuth = SpotifyApi.withUserAuthorization(
+const spotifyApiAccessToken: SpotifyApi = SpotifyApi.withAccessToken(
+  clientId,
+  accessToken
+)
+
+const spotifyApiUserAuth: SpotifyApi = SpotifyApi.withUserAuthorization(
   clientId,
   redirectUri,
   scopes,
@@ -65,7 +77,6 @@ export const getPlaylistUris = async (
       undefined
     )
     const result = response.tracks.items.map((track) => track.track.uri)
-    const uris = { uris: result }
     return result
   } catch (error) {
     throw new Error(`Error fetching playlist uris in service layer: ${error}`)
@@ -87,7 +98,7 @@ export const getAllPlaylistTracks = async (
       const response = await spotifyApi.playlists.getPlaylistItems(
         playlistId,
         undefined,
-        'items(track(name,artists(name))),total',
+        'items(track(name,uri,artists(name))),total',
         50,
         offset
       )
@@ -104,10 +115,12 @@ export const getAllPlaylistTracks = async (
 
 export const startPlayback = async (uris: string[]) => {
   try {
-    await spotifyApiUserAuth.player.startResumePlayback({
-      device_id: '0622fb5c01b5410423df29adc33e635ebe7d8a2f',
-      uris: uris,
-    } as any)
+    console.log(spotifyApiAccessToken.player.startResumePlayback)
+    await spotifyApiAccessToken.player.startResumePlayback(
+      '0622fb5c01b5410423df29adc33e635ebe7d8a2f',
+      undefined,
+      uris
+    )
   } catch (e) {
     throw new Error(`player aint working: ${e}`)
   }
