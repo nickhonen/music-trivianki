@@ -83,8 +83,8 @@ export const getPlaylistUris = async (
   }
 }
 
-// Doing this to get all tracks in a playlist and get around spotify limit. Might
-// separate out the offset logic.
+// Gets all playlist tracks with uri, name, artist. 
+// Line 111-115 can be ommitted if different data is wanted
 export const getAllPlaylistTracks = async (
   playlistId: string
   // also need to add type here with my limited fields, or just dont limit fields
@@ -98,16 +98,23 @@ export const getAllPlaylistTracks = async (
       const response = await spotifyApi.playlists.getPlaylistItems(
         playlistId,
         undefined,
-        'items(track(name,uri,artists(name))),total',
+        'items(track(name,uri,artists(name)))',
         50,
         offset
       )
+
       allTracks.push(...response.items)
 
       if (response.items.length < 50) break
       offset += 50
     }
-    return allTracks
+    // packaging data nicely for json
+    const result = allTracks.map((track) => ({
+      name: track.track.name,
+      artist: track.track.artists.map((artist) => artist.name).join(', '),
+      uri: track.track.uri,
+    }))
+    return result
   } catch (error) {
     throw new Error(`Error in getAllPlaylistTracks: ${error}`)
   }
