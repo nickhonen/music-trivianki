@@ -1,17 +1,17 @@
 import { useState } from "react";
-import "./App
+import "./App.css";
 
 type Question = {
-  question: string
-  options: string[]
-  correctAnswer: number
-}
-
+  question: string;
+  options: string[];
+  correctAnswer: number;
+};
 
 function App() {
   const [score, setScore] = useState(0);
   const [message, setMessage] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const questions: Question[] = [
     {
@@ -32,8 +32,35 @@ function App() {
     } else {
       setMessage("Wrong!");
     }
-    setCurrentQuestion((currentQuestion + 1) % questions.length);
   };
+
+  const handleNext = () => {
+    if (currentQuestion === questions.length - 1) {
+      setIsGameOver(true);
+    } else {
+      setCurrentQuestion(currentQuestion + 1);
+      setMessage(""); // Clear the message for next question
+    }
+  };
+
+  const restartGame = () => {
+    setCurrentQuestion(0);
+    setScore(0);
+    setMessage("");
+    setIsGameOver(false);
+  };
+
+  if (isGameOver) {
+    return (
+      <div className="card text-center">
+        <h1>Game Over!</h1>
+        <p>
+          Final Score: {score}/{questions.length}
+        </p>
+        <button onClick={restartGame}>Play Again</button>
+      </div>
+    );
+  }
 
   return (
     <>
