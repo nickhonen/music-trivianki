@@ -70,23 +70,15 @@ function App() {
           <h2 className="text-2xl font-bold">
             {questions[currentQuestion].question}
           </h2>
-          <button onClick={() => handleAnswerSelection(0)}>
-            {questions[currentQuestion].options[0]}
-          </button>
-          <button onClick={() => handleAnswerSelection(1)}>
-            {questions[currentQuestion].options[1]}
-          </button>
-          <button onClick={() => handleAnswerSelection(2)}>
-            {questions[currentQuestion].options[2]}
-          </button>
+          {questions[currentQuestion].options.map((option, index) => (
+            <button key={index} onClick={() => handleAnswerSelection(index)}>
+              {option}
+            </button>
+          ))}
           <p className="text-lg">{message}</p>
+          {message && <button onClick={handleNext}>Next Question</button>}
+          <p>Score: {score}</p>
         </div>
-        <button onClick={() => setScore((score) => score + 1)}>
-          score is {score}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
     </>
   );
