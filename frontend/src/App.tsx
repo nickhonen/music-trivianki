@@ -1,5 +1,6 @@
 import { useState } from "react";
-import "./App.css";
+import { Button } from "./components/ui/button";
+import MusicQuestion from "./components/question";
 
 type Question = {
   question: string;
@@ -10,7 +11,7 @@ type Question = {
 function App() {
   const [score, setScore] = useState(0);
   const [message, setMessage] = useState("");
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
 
   const questions: Question[] = [
@@ -26,8 +27,10 @@ function App() {
     },
   ];
 
+  const currentQuestion = questions[currentQuestionIndex];
+
   const handleAnswerSelection = (selectedAnswer: number) => {
-    if (selectedAnswer === questions[currentQuestion].correctAnswer) {
+    if (selectedAnswer === questions[currentQuestionIndex].correctAnswer) {
       setMessage("Correct!");
     } else {
       setMessage("Wrong!");
@@ -35,16 +38,16 @@ function App() {
   };
 
   const handleNext = () => {
-    if (currentQuestion === questions.length - 1) {
+    if (currentQuestionIndex === questions.length - 1) {
       setIsGameOver(true);
     } else {
-      setCurrentQuestion(currentQuestion + 1);
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
       setMessage(""); // Clear the message for next question
     }
   };
 
   const restartGame = () => {
-    setCurrentQuestion(0);
+    setCurrentQuestionIndex(0);
     setScore(0);
     setMessage("");
     setIsGameOver(false);
@@ -64,19 +67,29 @@ function App() {
 
   return (
     <>
-      <div className="card text-center">
-        <h1>Welcome to Music Trivia</h1>
-        <div className="flex flex-col gap-5 pt-4">
-          <h2 className="text-2xl font-bold">
+      <div className="min-h-screen bg-background p-8">
+        <div className="max-w-2xl mx-auto space-y-8">
+          <h1 className="text-4xl font-bold">Welcome to Music Trivia</h1>
+        </div>
+
+        
+        <MusicQuestion
+          question={currentQuestion.question}
+          options={currentQuestion.options}
+          correctAnswer={currentQuestion.correctAnswer}
+          onAnswer={handleAnswerSelection}
+        />
+          {/* <h2 className="text-2xl font-bold">
             {questions[currentQuestion].question}
           </h2>
           {questions[currentQuestion].options.map((option, index) => (
-            <button key={index} onClick={() => handleAnswerSelection(index)}>
+            <Button key={index} onClick={() => handleAnswerSelection(index)}>
               {option}
-            </button>
-          ))}
+            </Button>
+          ))} */}
+        <div className="flex flex-col gap-5 pt-4 pb-4">
           <p className="text-lg">{message}</p>
-          {message && <button onClick={handleNext}>Next Question</button>}
+          {message && <Button onClick={handleNext}>Next Question</Button>}
           <p>Score: {score}</p>
         </div>
       </div>
