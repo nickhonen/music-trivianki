@@ -13,8 +13,8 @@ import { Play, Pause } from "lucide-react";
 interface QuestionProps {
   question: string;
   options: string[];
-  correctAnswer: number;
   onAnswer: (songIndex: number) => void;
+  message: string;
   //   isPlaying?: boolean;
   //   onPlayPause?: () => void;
 }
@@ -22,8 +22,8 @@ interface QuestionProps {
 const MusicQuestion: React.FC<QuestionProps> = ({
   question,
   options,
-  correctAnswer,
   onAnswer,
+  message,
   //   isPlaying = false,
   //   onPlayPause,
 }) => {
@@ -47,7 +47,7 @@ const MusicQuestion: React.FC<QuestionProps> = ({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Select onValueChange={onAnswer}>
+        <Select onValueChange={onAnswer} disabled={message !== ""}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select a song..." />
           </SelectTrigger>

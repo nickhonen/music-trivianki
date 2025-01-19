@@ -32,6 +32,7 @@ function App() {
   const handleAnswerSelection = (selectedAnswer: number) => {
     if (selectedAnswer === questions[currentQuestionIndex].correctAnswer) {
       setMessage("Correct!");
+      setScore((prev) => prev + 1);
     } else {
       setMessage("Wrong!");
     }
@@ -55,7 +56,7 @@ function App() {
 
   if (isGameOver) {
     return (
-      <div className="card text-center">
+      <div className="text-center mx-auto">
         <h1>Game Over!</h1>
         <p>
           Final Score: {score}/{questions.length}
@@ -69,16 +70,16 @@ function App() {
     <>
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-2xl mx-auto space-y-8">
-          <h1 className="text-4xl font-bold">Welcome to Music Trivia</h1>
-        </div>
+          <div className="text-center">
+            <h1 className="text-4xl font-bold">Welcome to Music Trivia</h1>
+          </div>
 
-        
-        <MusicQuestion
-          question={currentQuestion.question}
-          options={currentQuestion.options}
-          correctAnswer={currentQuestion.correctAnswer}
-          onAnswer={handleAnswerSelection}
-        />
+          <MusicQuestion
+            question={currentQuestion.question}
+            options={currentQuestion.options}
+            message={message}
+            onAnswer={handleAnswerSelection}
+          />
           {/* <h2 className="text-2xl font-bold">
             {questions[currentQuestion].question}
           </h2>
@@ -87,10 +88,11 @@ function App() {
               {option}
             </Button>
           ))} */}
-        <div className="flex flex-col gap-5 pt-4 pb-4">
-          <p className="text-lg">{message}</p>
-          {message && <Button onClick={handleNext}>Next Question</Button>}
-          <p>Score: {score}</p>
+          <div className="flex flex-col gap-4 items-center">
+            <p className="text-lg font-bold">{message}</p>
+            {message && <Button onClick={handleNext}>Next Question</Button>}
+            <p className="text-lg font-bold">Score: {score}</p>
+          </div>
         </div>
       </div>
     </>
