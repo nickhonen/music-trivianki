@@ -56,12 +56,14 @@ function App() {
 
   if (isGameOver) {
     return (
-      <div className="text-center mx-auto">
-        <h1>Game Over!</h1>
-        <p>
+      <div className="text-center flex flex-col gap-8 items-center border rounded-lg p-8">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+          Game Over!
+        </h1>
+        <p className="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
           Final Score: {score}/{questions.length}
         </p>
-        <button onClick={restartGame}>Play Again</button>
+        <Button onClick={restartGame}>Play Again</Button>
       </div>
     );
   }
