@@ -1,5 +1,21 @@
 import { useEffect, useState } from "react";
 import { SpotifyApi, SearchResults } from "@spotify/web-api-ts-sdk";
+import { useSpotify } from "@/hooks/useSpotify";
+
+function SpotifyTest() {
+  const sdk = useSpotify(
+    import.meta.env.VITE_SPOTIFY_CLIENT_ID as string,
+    import.meta.env.VITE_SPOTIFY_REDIRECT_URI as string,
+    // scopes, should get from userDetails
+    [
+      "user-read-playback-state",
+      "user-modify-playback-state",
+      "streaming",
+      "app-remote-control",
+    ]
+  );
+  return sdk ? <SpotifySearch sdk={sdk} /> : <div>Not authed boi</div>;
+}
 
 function SpotifySearch({ sdk }: { sdk: SpotifyApi }) {
   const [results, setResults] = useState<SearchResults<["artist"]>>(
@@ -41,4 +57,4 @@ function SpotifySearch({ sdk }: { sdk: SpotifyApi }) {
   );
 }
 
-export default SpotifySearch;
+export default SpotifyTest;

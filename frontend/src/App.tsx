@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "./components/ui/button";
 import MusicQuestion from "./components/question";
 import { useSpotify } from "./hooks/useSpotify";
-import SpotifySearch from "./components/spotify";
+import SpotifyTest from "./components/spotify";
 
 type Question = {
   question: string;
@@ -11,18 +11,11 @@ type Question = {
 };
 
 function App() {
-  const sdk = useSpotify(
-    import.meta.env.VITE_SPOTIFY_CLIENT_ID as string,
-    import.meta.env.VITE_SPOTIFY_REDIRECT_URI as string,
-    // scopes, should get from userDetails
-    [
-      "user-read-playback-state",
-      "user-modify-playback-state",
-      "streaming",
-      "app-remote-control",
-    ]
+  return (
+    <>
+      <SpotifyTest />
+    </>
   );
-  return sdk ? <SpotifySearch sdk={sdk} /> : <div>Not authed boi</div>;
 }
 //   const [score, setScore] = useState(0);
 //   const [message, setMessage] = useState("");
