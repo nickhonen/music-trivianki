@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "./components/ui/button";
 import MusicQuestion from "./components/question";
+import { useSpotify } from "./hooks/useSpotify";
 
 type Question = {
   question: string;
@@ -13,6 +14,10 @@ function App() {
   const [message, setMessage] = useState("");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
+
+  const sdk = useSpotify(
+    
+  )
 
   const questions: Question[] = [
     {
