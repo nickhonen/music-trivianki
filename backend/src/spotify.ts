@@ -5,7 +5,8 @@ const clientId = process.env.SPOTIFY_CLIENT_ID as string
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET as string
 const redirectUri = process.env.REDIRECT_URI as string
 
-// this should be gotten from the frontend
+// this should be gotten from the frontend. Idk where I found that out.
+
 const accessToken: AccessToken = {
   access_token: process.env.OAUTH_ACCESS_TOKEN as string,
   token_type: 'Bearer',

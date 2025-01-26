@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button } from "./components/ui/button";
 import MusicQuestion from "./components/question";
-import { useSpotify } from "./hooks/useSpotify";
-import SpotifyTest from "./components/spotify";
+// import { useSpotify } from "./hooks/useSpotify";
+// import SpotifyTest from "./components/spotify";
+import PlayButton from "./components/playbutton";
 
 type Question = {
   question: string;
@@ -28,6 +29,8 @@ function App() {
       correctAnswer: 0,
     },
   ];
+
+  const songUris = ["spotify:track:3ZFTkvIE7kyPt6Nu3PEa7V"];
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -77,7 +80,7 @@ function App() {
           <div className="text-center">
             <h1 className="text-4xl font-bold">Welcome to Music Trivia</h1>
           </div>
-
+          <PlayButton uris={songUris} />
           <MusicQuestion
             question={currentQuestion.question}
             options={currentQuestion.options}
